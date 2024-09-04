@@ -2,6 +2,7 @@ import React from 'react';
 import FigureBox from './Figurebox';
 import Graph from './Graph';
 import Alert from './Alerts';
+import MapEmbed from './MapEmbed';
 
 function Dashboard() {
     return (
@@ -18,8 +19,8 @@ function Dashboard() {
             </div>
 
             <div className="flex space-x-4">
-                <div className="w-1/2 bg-gray-100 p-4 rounded-lg">
-                    <p className="text-center text-lg font-semibold">Map Placeholder</p>
+                <div className="w-1/2 bg-gray-100 p-4 rounded-lg h-96">
+                    <MapEmbed></MapEmbed>
                     {/* Embed map component or iframe here */}
                 </div>
 
