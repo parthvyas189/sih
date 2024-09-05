@@ -1,17 +1,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const twilio = require('twilio');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env
 
 const app = express();
 const port = 3001;
 
+// Middleware
 app.use(bodyParser.json()); // Parse JSON requests
+app.use(cors()); // Allow cross-origin requests
 
 // Twilio credentials from environment variables
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
+
+// Root route (optional)
+app.get('/', (req, res) => {
+  res.send('Welcome to the Twilio SMS API backend');
+});
 
 // Route to send SMS
 app.post('/send-sms', (req, res) => {
@@ -20,7 +28,7 @@ app.post('/send-sms', (req, res) => {
   client.messages
     .create({
       body: message,
-      from: process.env.TWILIO_PHONE_NUMBER, // Twilio phone number
+      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
       to: phoneNumber, // User's phone number
     })
     .then((message) => {

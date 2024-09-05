@@ -261,7 +261,9 @@ function GetMobileAlerts() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const fullNumber = `${countryCode}${mobileNumber}`;
-  
+    console.log(`Sending SMS to: ${fullNumber}`);
+
+    // Sending POST request to backend
     fetch("http://localhost:3001/send-sms", {
       method: "POST",
       headers: {
@@ -280,7 +282,7 @@ function GetMobileAlerts() {
         console.error("Error:", error);
       });
   };
-  
+
   return (
     <div className="p-6">
       <h2 className="text-xl font-semibold mb-6 text-center">
