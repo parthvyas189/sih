@@ -246,34 +246,52 @@ const countryCodes = [
 ];
 
 function GetMobileAlerts() {
-    const [mobileNumber, setMobileNumber] = useState("");
-    const [countryCode, setCountryCode] = useState("+91"); // default for India
-    const [allowNotifications, setAllowNotifications] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+91"); // default for India
+  const [allowNotifications, setAllowNotifications] = useState(null);
+
+  const handleMobileNumberChange = (e) => {
+    const value = e.target.value;
+    // Restrict input to 10 digits
+    if (/^\d{0,10}$/.test(value)) {
+      setMobileNumber(value);
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const fullNumber = `${countryCode}${mobileNumber}`;
   
-    const handleMobileNumberChange = (e) => {
-      const value = e.target.value;
-      // Restrict input to 10 digits
-      if (/^\d{0,10}$/.test(value)) {
-        setMobileNumber(value);
-      }
-    };
+    fetch("http://localhost:3001/send-sms", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phoneNumber: fullNumber,
+        message: "Your mobile notification alert is active!",
+      }),
+    })
+      .then((response) => response.text())
+      .then((data) => {
+        alert("SMS sent successfully!");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
   
-    const handleNotificationChange = (option) => {
-      setAllowNotifications(option);
-    };
-  
-    const isMobileNumberValid = mobileNumber.length === 10;
-  
-    return (
-      <div className="p-6">
-        <h2 className="text-xl font-semibold mb-6 text-center">
-          MOBILE NOTIFICATION ALERTS
-        </h2>
-  
-        {/* Display box for entering mobile number */}
-        <div className="bg-white p-8 shadow-md border border-gray-300 rounded-lg mb-10 max-w-xl mx-auto">
-          <p className="text-lg mb-6 text-center">Enter your mobile number</p>
-  
+  return (
+    <div className="p-6">
+      <h2 className="text-xl font-semibold mb-6 text-center">
+        MOBILE NOTIFICATION ALERTS
+      </h2>
+
+      {/* Display box for entering mobile number */}
+      <div className="bg-white p-8 shadow-md border border-gray-300 rounded-lg mb-10 max-w-xl mx-auto">
+        <p className="text-lg mb-6 text-center">Enter your mobile number</p>
+
+        <form onSubmit={handleSubmit}>
           <div className="flex space-x-4 mb-6 justify-center">
             {/* Country code selection */}
             <select
@@ -287,7 +305,7 @@ function GetMobileAlerts() {
                 </option>
               ))}
             </select>
-  
+
             {/* Mobile number input */}
             <input
               type="text"
@@ -297,11 +315,21 @@ function GetMobileAlerts() {
               placeholder="Enter 10 digit number"
             />
           </div>
-  
-          
-        </div>
+
+          {/* Submit button */}
+          <div className="text-center">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white p-3 rounded-md"
+              disabled={mobileNumber.length !== 10}
+            >
+              Send SMS
+            </button>
+          </div>
+        </form>
       </div>
-    );
-  }
-  
-  export default GetMobileAlerts;
+    </div>
+  );
+}
+
+export default GetMobileAlerts;
