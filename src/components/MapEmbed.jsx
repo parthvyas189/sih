@@ -8,7 +8,7 @@ function Map({ lat, lng, shipData }) {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API, // Replace with your actual Google Maps API key
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY, // Replace with your actual Google Maps API key
       version: 'weekly',
     });
 
